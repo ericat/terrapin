@@ -1,5 +1,5 @@
 const http = require('http');
-const app = require('./app');
+const app = require('./');
 
 const PORT = 8080;
 const HOST = '0.0.0.0';

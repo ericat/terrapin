@@ -1,6 +1,6 @@
 FROM node:boron
 
-WORKDIR /usr/src/app
+WORKDIR .
 
 COPY package.json .
 

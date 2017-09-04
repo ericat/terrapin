@@ -4,10 +4,35 @@ provider "aws" {
 }
 
 resource "aws_instance" "cat-stuff-web" {
+  # Note: ami must belong to the correct region
   ami = "ami-489f8e2c"
   instance_type = "t2.micro"
   key_name = "cat-stuff"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+
+  connection {
+    agent = false
+    type = "ssh"
+    user = "ec2-user"
+    private_key = "${file("~/.ssh/cat-stuff.pem")}"
+  }
+
+  # Note: copying files over to the instance
+  provisioner "file" {
+    source = "app/"
+    destination = "/home/ec2-user/"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum update -y",
+      "sudo yum install -y docker",
+      "sudo service docker start",
+      "sudo usermod -a -G docker ec2-user",
+      "sudo docker build -t catstuff .",
+      "sudo docker run -d -p 8080:8080 catstuff"
+    ]
+  }
 
   tags {
     Name = "terraform-example"
@@ -21,7 +46,7 @@ resource "aws_security_group" "instance" {
     from_port = "${var.server_port}"
     to_port = "${var.server_port}"
     protocol = "tcp"
-    # Note(ericat): CIDR to specfy blocks of addresses
+    # Note CIDR to specfy blocks of addresses
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -30,7 +55,6 @@ resource "aws_security_group" "instance" {
     from_port = "${var.ssh_port}"
     to_port = "${var.ssh_port}"
     protocol = "tcp"
-    # Note(ericat): CIDR to specfy blocks of addresses
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -42,3 +66,6 @@ resource "aws_security_group" "instance" {
   }
 }
 
+output "public_ip" {
+  value = "${aws_instance.cat-stuff-web.public_ip}"
+}
