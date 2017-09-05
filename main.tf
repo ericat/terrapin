@@ -1,11 +1,11 @@
 provider "aws" {
-  region = "eu-west-2"
+  region = "${var.aws_region}"
   shared_credentials_file = "$HOME/.aws/credentials"
 }
 
 resource "aws_instance" "cat-stuff-web" {
   # Note: ami must belong to the correct region
-  ami = "ami-489f8e2c"
+  ami = "${var.aws_ami}"
   instance_type = "t2.micro"
   key_name = "cat-stuff"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
