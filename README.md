@@ -8,7 +8,7 @@ $HOME/.aws/credentials
 ```
 * a private key, which can be generated through AWS, stored in:
 ```
-.ssh/cat-stuff.pem
+$HOME/.ssh/your-private-key.pem
 ```
 
 Always run `plan` first:
@@ -22,7 +22,8 @@ terraform apply
 ```
 
 If successful:
-``
+
+```
 Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 
 Outputs:
@@ -30,4 +31,4 @@ Outputs:
 public_ip = 52.56.161.210
 ```
 
-Go to http://52.56.161.210:8080/.
+Go to http://52.56.161.210:8080/
