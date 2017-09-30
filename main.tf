@@ -7,7 +7,7 @@ resource "aws_instance" "cat-stuff-web" {
   # Note: ami must belong to the correct region
   ami = "${var.aws_ami}"
   instance_type = "t2.micro"
-  key_name = "cat-stuff"
+  key_name = "${var.key_name}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
 
   connection {

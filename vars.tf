@@ -13,6 +13,11 @@ variable "aws_ami" {
   # Note: Ireland: ami-ebd02392
 }
 
+variable "key_name" {
+  description = "The key name"
+  default = "cat-stuff"
+}
+
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
   default = 8080
